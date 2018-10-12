@@ -92,6 +92,15 @@ A swarm is made up of multiple nodes, which can be either physical or virtual ma
 * Now, create a couple of VMs using docker-machine, using the VirtualBox driver:
 
   * `docker-machine create --driver virtualbox myvm1`
+
+    * To disable TLS do the following:
+
+      * `docker-machine ssh myvm1`
+
+      * `sudo vi /var/lib/boot2docker/profile`
+      
+      * Set `DOCKER_TLS=no` and `DOCKER_HOST='-H tcp://0.0.0.0:4040 -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2376'`
+
   * `docker-machine create --driver virtualbox myvm2`
 
 
@@ -347,3 +356,10 @@ The hard part is over. Now you just repeat the process you used in part 3 to dep
 ## Connect Docker Cloud
 
 * To deploy your swarm follow [this instructions](https://docs.docker.com/get-started/part6/#connect-docker-cloud)
+
+## Using Docker API
+
+* You can use the [Docker SDK](https://docs.docker.com/develop/sdk/) to communicate with your containers
+
+* In case you want to access the RESTful API directly, you can enable it to be tunnelled to an specific port
+  * Check [this tutorial](https://success.docker.com/article/how-do-i-enable-the-remote-api-for-dockerd) for more

@@ -2,12 +2,23 @@ import json
 import requests
 import time
 from urllib.request import urlopen
+import socket
+import ssl
+
+cert_manager = ('/Users/daniel/.docker/machine/machines/master/cert.pem', '/Users/daniel/.docker/machine/machines/master/key.pem')
+cert_node = ('/Users/daniel/.docker/machine/machines/node/cert.pem', '/Users/daniel/.docker/machine/machines/node/key.pem')
+
+scontext_manager = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2) #
+scontext_manager.load_cert_chain(cert_manager[0], cert_manager[1])
+
+scontext_node = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+scontext_node.load_cert_chain(cert_node[0], cert_node[1])
 
 # here we assume you tunneled port 4000 of all swarm nodes to ports on your local machine
-nodes_list = ["127.0.0.1:4000", "127.0.0.1:4001", "127.0.0.1:4002"]
+nodes_list = [("192.168.99.100:2376", scontext_manager), ("192.168.99.101:2376", scontext_node)]
 
 # the address your managers nodes REST API is listening
-manager = "127.0.0.1:4000"
+manager = "192.168.99.100:2376"
 
 # upper and lower cpu usage thresholds where scaling should happen on
 cpu_upper_threshold = 0.5
@@ -15,6 +26,9 @@ cpu_lower_threshold = 0.2
 
 # time interval between each avg cpu usage calculations
 interval = 5
+
+# service to be analyzed
+service_name = "getstartedlab_web"
 
 # this is taken directly from docker client:
 #   https://github.com/docker/docker/blob/28a7577a029780e4533faf3d057ec9f6c7a10948/api/client/stats.go#L309
@@ -33,8 +47,8 @@ def calculate_cpu_percent(d):
 def get_tasks(service):
     service["tasks"] = []
     with urlopen(
-            'http://{manager}/tasks?filters={{"service":{{"{service}":true}},"desired-state":{{"running":true}}}}'.format(
-                manager=manager, service=service["name"])) as url:
+            'https://{manager}/tasks?filters={{"service":{{"{service}":true}},"desired-state":{{"running":true}}}}'.format(
+                manager=manager, service=service["name"]), context=scontext_manager) as url:
         data = json.loads(url.read().decode())
         print("{service} tasks:".format(service=service["name"]))
         for task in data:
@@ -51,7 +65,8 @@ def get_tasks(service):
 def scale(service, replicas):
     print("scaling triggered...")
     # get the service - we need the version of the service object
-    with urlopen("http://{manager}/services/{service}".format(manager=manager, service=service["name"])) as url:
+    with urlopen("https://{manager}/services/{service}".format(manager=manager, service=service["name"]),
+    context=scontext_manager) as url:
         data = json.loads(url.read().decode())
         version = data["Version"]["Index"]
 
@@ -60,10 +75,10 @@ def scale(service, replicas):
         spec = data["Spec"]
         spec["Mode"]["Replicated"]["Replicas"] = replicas
 
-        r = requests.post("http://{manager}/services/{service}/update?version={version}".format(manager=manager,
+        r = requests.post("https://{manager}/services/{service}/update?version={version}".format(manager=manager,
                                                                                                 service=service["name"],
                                                                                                 version=version),
-                          data=json.dumps(spec))
+                          data=json.dumps(spec), cert=cert_manager)
         if r.status_code == 200:
             get_tasks(service)
         else:
@@ -74,15 +89,17 @@ def scale(service, replicas):
 nodes = {}
 print("Nodes:")
 for node in nodes_list:
-    with urlopen("http://{node}/info".format(node=node)) as url:
+    node_ip = node[0]
+    node_context = node[1]
+    with urlopen("https://{node}/info".format(node=node_ip), context=node_context) as url:
         data = json.loads(url.read().decode())
-        nodes[data["Swarm"]["NodeID"]] = node
+        nodes[data["Swarm"]["NodeID"]] = (node_ip, node_context)
         print('''\t NodeID: {} '''.format(
             data["Swarm"]["NodeID"], ))
 
 # list all the services
 services = {}
-with urlopen("http://{manager}/services".format(manager=manager)) as url:
+with urlopen("https://{manager}/services".format(manager=manager), context=scontext_manager) as url:
     data = json.loads(url.read().decode())
     print("Services:")
     for service in data:
@@ -105,9 +122,13 @@ while True:
     # it can be whatever metrics you interested in
     # x_usages = []
 
-    for task in services["web-worker"]["tasks"]:
-        with urlopen('http://{node}/containers/{containerID}/stats?stream=false'.format(
-                node=nodes[task["NodeID"]], containerID=task["ContainerID"])) as url:
+    print('-------------')
+
+    print(services[service_name]["tasks"])
+
+    for task in services[service_name]["tasks"]:
+        with urlopen('https://{node}/containers/{containerID}/stats?stream=false'.format(
+                node=nodes[task["NodeID"]][0], containerID=task["ContainerID"]), context=nodes[task["NodeID"]][1]) as url:
             data = json.loads(url.read().decode())
             cpu_useges.append(calculate_cpu_percent(data))
             # x_usages.append(calculate_x(data))
@@ -120,14 +141,14 @@ while True:
     if cpu_usage_avg > cpu_upper_threshold:
         # scale up
         # here we use a very naive approach and just increase the number of replicas by 1
-        task_count = len(services["web-worker"]["tasks"])
-        scale(services["web-worker"], task_count + 1)
+        task_count = len(services[service_name]["tasks"])
+        scale(services[service_name], task_count + 1)
     elif cpu_usage_avg < cpu_lower_threshold:
         # scale down
         # here we use a very naive approach and just reduce the number of replicas by 1
-        task_count = len(services["web-worker"]["tasks"])
+        task_count = len(services[service_name]["tasks"])
         if task_count > 1:
-            scale(services["web-worker"], task_count - 1)
+            scale(services[service_name], task_count - 1)
 
     else:  # do nothing
         pass
