@@ -4,11 +4,14 @@ import time
 from urllib.request import urlopen
 import socket
 import ssl
+import urllib3
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 cert_manager = ('/Users/daniel/.docker/machine/machines/master/cert.pem', '/Users/daniel/.docker/machine/machines/master/key.pem')
 cert_node = ('/Users/daniel/.docker/machine/machines/node/cert.pem', '/Users/daniel/.docker/machine/machines/node/key.pem')
 
-scontext_manager = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2) #
+scontext_manager = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2) 
 scontext_manager.load_cert_chain(cert_manager[0], cert_manager[1])
 
 scontext_node = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
@@ -28,7 +31,7 @@ cpu_lower_threshold = 0.2
 interval = 5
 
 # service to be analyzed
-service_name = "getstartedlab_web"
+service_in_analysis_name = "getstartedlab_web"
 
 # this is taken directly from docker client:
 #   https://github.com/docker/docker/blob/28a7577a029780e4533faf3d057ec9f6c7a10948/api/client/stats.go#L309
@@ -78,7 +81,7 @@ def scale(service, replicas):
         r = requests.post("https://{manager}/services/{service}/update?version={version}".format(manager=manager,
                                                                                                 service=service["name"],
                                                                                                 version=version),
-                          data=json.dumps(spec), cert=cert_manager)
+                          data=json.dumps(spec), verify=False, cert=cert_manager)
         if r.status_code == 200:
             get_tasks(service)
         else:
@@ -124,9 +127,7 @@ while True:
 
     print('-------------')
 
-    print(services[service_name]["tasks"])
-
-    for task in services[service_name]["tasks"]:
+    for task in services[service_in_analysis_name]["tasks"]:
         with urlopen('https://{node}/containers/{containerID}/stats?stream=false'.format(
                 node=nodes[task["NodeID"]][0], containerID=task["ContainerID"]), context=nodes[task["NodeID"]][1]) as url:
             data = json.loads(url.read().decode())
@@ -141,14 +142,14 @@ while True:
     if cpu_usage_avg > cpu_upper_threshold:
         # scale up
         # here we use a very naive approach and just increase the number of replicas by 1
-        task_count = len(services[service_name]["tasks"])
-        scale(services[service_name], task_count + 1)
+        task_count = len(services[service_in_analysis_name]["tasks"])
+        scale(services[service_in_analysis_name], task_count + 1)
     elif cpu_usage_avg < cpu_lower_threshold:
         # scale down
         # here we use a very naive approach and just reduce the number of replicas by 1
-        task_count = len(services[service_name]["tasks"])
+        task_count = len(services[service_in_analysis_name]["tasks"])
         if task_count > 1:
-            scale(services[service_name], task_count - 1)
+            scale(services[service_in_analysis_name], task_count - 1)
 
     else:  # do nothing
         pass
