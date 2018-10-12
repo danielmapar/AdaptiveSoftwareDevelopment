@@ -11,7 +11,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 cert_manager = ('/Users/daniel/.docker/machine/machines/master/cert.pem', '/Users/daniel/.docker/machine/machines/master/key.pem')
 cert_node = ('/Users/daniel/.docker/machine/machines/node/cert.pem', '/Users/daniel/.docker/machine/machines/node/key.pem')
 
-scontext_manager = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2) 
+scontext_manager = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
 scontext_manager.load_cert_chain(cert_manager[0], cert_manager[1])
 
 scontext_node = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
@@ -31,7 +31,7 @@ cpu_lower_threshold = 0.2
 interval = 5
 
 # service to be analyzed
-service_in_analysis_name = "getstartedlab_web"
+services_in_analysis_name = ["getstartedlab_web", "getstartedlab_redis", "getstartedlab_visualizer"]
 
 # this is taken directly from docker client:
 #   https://github.com/docker/docker/blob/28a7577a029780e4533faf3d057ec9f6c7a10948/api/client/stats.go#L309
@@ -127,34 +127,38 @@ while True:
 
     print('-------------')
 
-    for task in services[service_in_analysis_name]["tasks"]:
-        with urlopen('https://{node}/containers/{containerID}/stats?stream=false'.format(
-                node=nodes[task["NodeID"]][0], containerID=task["ContainerID"]), context=nodes[task["NodeID"]][1]) as url:
-            data = json.loads(url.read().decode())
-            cpu_useges.append(calculate_cpu_percent(data))
-            # x_usages.append(calculate_x(data))
+    for service_in_analysis_name in services_in_analysis_name:
 
-    cpu_usage_avg = sum(cpu_useges) / len(cpu_useges)
-    # x_usage_avg = sum(x_useges) / len(x_useges)
+        print("Analyzing {service} service".format(service=service_in_analysis_name))
 
-    print("CPU Usage (avg): {0:.2f}%".format(cpu_usage_avg * 100))
+        for task in services[service_in_analysis_name]["tasks"]:
+            with urlopen('https://{node}/containers/{containerID}/stats?stream=false'.format(
+                    node=nodes[task["NodeID"]][0], containerID=task["ContainerID"]), context=nodes[task["NodeID"]][1]) as url:
+                data = json.loads(url.read().decode())
+                cpu_useges.append(calculate_cpu_percent(data))
+                # x_usages.append(calculate_x(data))
 
-    if cpu_usage_avg > cpu_upper_threshold:
-        # scale up
-        # here we use a very naive approach and just increase the number of replicas by 1
-        task_count = len(services[service_in_analysis_name]["tasks"])
-        scale(services[service_in_analysis_name], task_count + 1)
-    elif cpu_usage_avg < cpu_lower_threshold:
-        # scale down
-        # here we use a very naive approach and just reduce the number of replicas by 1
-        task_count = len(services[service_in_analysis_name]["tasks"])
-        if task_count > 1:
-            scale(services[service_in_analysis_name], task_count - 1)
+        cpu_usage_avg = sum(cpu_useges) / len(cpu_useges)
+        # x_usage_avg = sum(x_useges) / len(x_useges)
 
-    else:  # do nothing
-        pass
+        print("CPU Usage (avg): {0:.2f}%".format(cpu_usage_avg * 100))
 
-    # put the code for scaling up and down based on metrics x here.
+        if cpu_usage_avg > cpu_upper_threshold:
+            # scale up
+            # here we use a very naive approach and just increase the number of replicas by 1
+            task_count = len(services[service_in_analysis_name]["tasks"])
+            scale(services[service_in_analysis_name], task_count + 1)
+        elif cpu_usage_avg < cpu_lower_threshold:
+            # scale down
+            # here we use a very naive approach and just reduce the number of replicas by 1
+            task_count = len(services[service_in_analysis_name]["tasks"])
+            if task_count > 1:
+                scale(services[service_in_analysis_name], task_count - 1)
 
-    # block the main thread for <interval> seconds
-    time.sleep(interval)
+        else:  # do nothing
+            pass
+
+        # put the code for scaling up and down based on metrics x here.
+
+        # block the main thread for <interval> seconds
+        time.sleep(interval)
