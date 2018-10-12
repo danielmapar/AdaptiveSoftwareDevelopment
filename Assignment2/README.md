@@ -98,7 +98,7 @@ A swarm is made up of multiple nodes, which can be either physical or virtual ma
       * `docker-machine ssh myvm1`
 
       * `sudo vi /var/lib/boot2docker/profile`
-      
+
       * Set `DOCKER_TLS=no` and `DOCKER_HOST='-H tcp://0.0.0.0:4040 -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2376'`
 
   * `docker-machine create --driver virtualbox myvm2`
@@ -361,5 +361,19 @@ The hard part is over. Now you just repeat the process you used in part 3 to dep
 
 * You can use the [Docker SDK](https://docs.docker.com/develop/sdk/) to communicate with your containers
 
-* In case you want to access the RESTful API directly, you can enable it to be tunnelled to an specific port
+* In case you want to access the RESTful API directly without TLS (pure http), you can enable it to be tunneled to an specific port
+
   * Check [this tutorial](https://success.docker.com/article/how-do-i-enable-the-remote-api-for-dockerd) for more
+
+    * This is not recommended
+
+
+* Inside the `dummy-scaler` folder, you will find a Python 3 program called `dummy-scaler.py`
+
+  * This program uses the TLS protocol in conjunction with the VMs certificate files in order to access the Docker Engine API of each VM securely.
+
+  * To run this app just do `python3 dummy-scaler.py`, but before doing so, remember to:
+
+    1. Update the `cert_manager` and `cert_node` variables with your cert paths
+
+    2. Update `services_in_analysis_name` with the name of the services you wish to analyze
