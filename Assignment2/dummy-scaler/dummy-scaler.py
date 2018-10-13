@@ -24,8 +24,8 @@ nodes_list = [("192.168.99.100:2376", scontext_manager), ("192.168.99.101:2376",
 manager = "192.168.99.100:2376"
 
 # upper and lower cpu usage thresholds where scaling should happen on
-cpu_upper_threshold = 0.50
-cpu_lower_threshold = 0.10
+cpu_upper_threshold = int(input("Enter a number from 0 to 100 for the CPU upper threshold: ")) / 100 # 0.50
+cpu_lower_threshold = int(input("Enter a number from 0 to 100 for the CPU lower threshold: ")) / 100 # 0.10
 
 # time interval between each avg cpu usage calculations
 interval = 5
@@ -120,45 +120,78 @@ for service_name, service in services.items():
 # here we consistently get the cpu usage of all the web-workers and calculate the average
 
 while True:
-    cpu_useges = []
+    cpu_usages = []
 
     # it can be whatever metrics you interested in
     # x_usages = []
 
-    print('-------------')
-
     for service_in_analysis_name in services_in_analysis_name:
 
+        #setpoint_calibration = {
+        #    "cpu_usage_avg": 0,
+        #    "total_runs": 0
+        #}
+
+        #valid_runs_needed_for_setpoint_calibration = 4
+
+        print('<<------------->>')
         print("Analyzing {service} service".format(service=service_in_analysis_name))
+        print("<<------------->>")
 
-        for task in services[service_in_analysis_name]["tasks"]:
-            with urlopen('https://{node}/containers/{containerID}/stats?stream=false'.format(
-                    node=nodes[task["NodeID"]][0], containerID=task["ContainerID"]), context=nodes[task["NodeID"]][1]) as url:
-                data = json.loads(url.read().decode())
-                cpu_useges.append(calculate_cpu_percent(data))
-                # x_usages.append(calculate_x(data))
+        for counter in range(0, 20):
 
-        cpu_usage_avg = sum(cpu_useges) / len(cpu_useges)
-        # x_usage_avg = sum(x_useges) / len(x_useges)
+            for task in services[service_in_analysis_name]["tasks"]:
+                with urlopen('https://{node}/containers/{containerID}/stats?stream=false'.format(
+                        node=nodes[task["NodeID"]][0], containerID=task["ContainerID"]), context=nodes[task["NodeID"]][1]) as url:
+                    data = json.loads(url.read().decode())
+                    cpu_usages.append(calculate_cpu_percent(data))
+                    # x_usages.append(calculate_x(data))
 
-        print("CPU Usage (avg): {0:.2f}%".format(cpu_usage_avg * 100))
+            cpu_usage_avg = sum(cpu_usages) / len(cpu_usages)
+            # x_usage_avg = sum(x_useges) / len(x_useges)
 
-        if cpu_usage_avg > cpu_upper_threshold:
-            # scale up
-            # here we use a very naive approach and just increase the number of replicas by 1
-            task_count = len(services[service_in_analysis_name]["tasks"])
-            scale(services[service_in_analysis_name], task_count + 1)
-        elif cpu_usage_avg < cpu_lower_threshold:
-            # scale down
-            # here we use a very naive approach and just reduce the number of replicas by 1
-            task_count = len(services[service_in_analysis_name]["tasks"])
-            if task_count > 1:
-                scale(services[service_in_analysis_name], task_count - 1)
+            print("CPU Usage (avg): {0:.2f}%".format(cpu_usage_avg * 100))
+            print("CPU Setpoints are currently from {low:.2f}% to {high:.2f}%".format(low=cpu_lower_threshold * 100, high=cpu_upper_threshold * 100))
+            print("-------------")
 
-        else:  # do nothing
-            pass
+            # This validation checks if the CPU analyses ran X times without breaking any setpoints (cpu threshold in our case)
+            # If that is the case, we consider this a constant workload and a setpoint calibration is done
+            #if setpoint_calibration["total_runs"] == valid_runs_needed_for_setpoint_calibration:
+            #
+            #    cpu_usage_avg_calibration = setpoint_calibration["cpu_usage_avg"] / setpoint_calibration["total_runs"]
+            #
+            #    if (cpu_lower_threshold - cpu_usage_avg_calibration) > 0.03:
+            #        if cpu_usage_avg_calibration < cpu_lower_threshold:
+            #            cpu_lower_threshold = cpu_lower_threshold - (cpu_usage_avg_calibration*2)
+            #        elif cpu_usage_avg_calibration > cpu_lower_threshold:
+            #            cpu_lower_threshold = cpu_lower_threshold + (cpu_usage_avg_calibration*2)
+            #
+            #    if (cpu_upper_threshold - cpu_usage_avg_calibration) > 0.03:
+            #        if cpu_usage_avg_calibration < cpu_upper_threshold:
+            #            cpu_upper_threshold = cpu_upper_threshold - (cpu_usage_avg_calibration*2)
+            #        elif cpu_usage_avg_calibration > cpu_upper_threshold:
+            #            cpu_upper_threshold = cpu_upper_threshold + (cpu_usage_avg_calibration*2)
+            #
+            #    setpoint_calibration = { "cpu_usage_avg": 0, "total_runs": 0 }
 
-        # put the code for scaling up and down based on metrics x here.
+            if cpu_usage_avg > cpu_upper_threshold:
+                # scale up
+                # here we use a very naive approach and just increase the number of replicas by 1
+                task_count = len(services[service_in_analysis_name]["tasks"])
+                scale(services[service_in_analysis_name], task_count + 1)
+            elif cpu_usage_avg < cpu_lower_threshold:
+                # scale down
+                # here we use a very naive approach and just reduce the number of replicas by 1
+                task_count = len(services[service_in_analysis_name]["tasks"])
+                if task_count > 1:
+                    scale(services[service_in_analysis_name], task_count - 1)
+                #else:
+                #    setpoint_calibration["cpu_usage_avg"] = setpoint_calibration["cpu_usage_avg"] + cpu_usage_avg
+                #    setpoint_calibration["total_runs"] = setpoint_calibration["total_runs"] + 1
+            else:  # do nothing
+                #setpoint_calibration["cpu_usage_avg"] = setpoint_calibration["cpu_usage_avg"] + cpu_usage_avg
+                #setpoint_calibration["total_runs"] = setpoint_calibration["total_runs"] + 1
+                pass
 
-        # block the main thread for <interval> seconds
-        time.sleep(interval)
+            # block the main thread for <interval> seconds
+            time.sleep(interval)
