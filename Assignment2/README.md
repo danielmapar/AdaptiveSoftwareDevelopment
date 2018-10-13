@@ -98,6 +98,8 @@ A swarm is made up of multiple nodes, which can be either physical or virtual ma
       * `docker-machine ssh myvm1`
 
       * `sudo vi /var/lib/boot2docker/profile`
+      
+        * This is being used by `/usr/local/etc/init.d/docker`
 
       * Set `DOCKER_TLS=no` and `DOCKER_HOST='-H tcp://0.0.0.0:4040 -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2376'`
 
