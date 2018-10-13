@@ -4,6 +4,8 @@ services:
     image: danielmapar/get-started:part2
     deploy:
       replicas: 5
+      # Using the flag “ — replicas” implies we don’t care on which node they
+      # are put on, if we want one service per node we can use “ — mode=global” instead.
       resources:
         limits:
           cpus: "0.1"

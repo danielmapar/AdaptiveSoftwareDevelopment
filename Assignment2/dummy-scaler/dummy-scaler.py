@@ -24,14 +24,14 @@ nodes_list = [("192.168.99.100:2376", scontext_manager), ("192.168.99.101:2376",
 manager = "192.168.99.100:2376"
 
 # upper and lower cpu usage thresholds where scaling should happen on
-cpu_upper_threshold = 0.5
-cpu_lower_threshold = 0.2
+cpu_upper_threshold = 0.50
+cpu_lower_threshold = 0.10
 
 # time interval between each avg cpu usage calculations
 interval = 5
 
 # service to be analyzed
-services_in_analysis_name = ["getstartedlab_web", "getstartedlab_redis", "getstartedlab_visualizer"]
+services_in_analysis_name = ["getstartedlab_web"]
 
 # this is taken directly from docker client:
 #   https://github.com/docker/docker/blob/28a7577a029780e4533faf3d057ec9f6c7a10948/api/client/stats.go#L309
