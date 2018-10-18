@@ -137,14 +137,10 @@ while True:
 
     # Derivative: (e(k)-e(k-1))/T
     derivative = abs(round((cpu_usage_avg*100 - cpu_usage_avg_prev*100) / (interval * 2)))
+    balanced_derivative = abs(round(derivative / 10))
 
-    if derivative > 0:
-        if derivative < 10:
-            scale_num = derivative
-        else:
-            scale_num = 10
-    elif derivative == 0:
-        scale_num = len(services[service_in_analysis_name]["tasks"])
+    if balanced_derivative > 0:
+        scale_num = balanced_derivative if balanced_derivative > 0 else 1
     else:
         scale_num = 1
 
@@ -165,8 +161,6 @@ while True:
         # scale down
         task_count = len(services[service_in_analysis_name]["tasks"])
         if task_count > 1:
-            if scale_num > task_count or scale_num == task_count:
-                scale_num = task_count - 1
             scale(services[service_in_analysis_name], task_count - scale_num)
     else:  # do nothing
         pass
