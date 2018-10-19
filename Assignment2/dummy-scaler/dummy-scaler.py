@@ -27,8 +27,13 @@ manager = "192.168.99.100:2376"
 cpu_upper_threshold = int(input("Enter a number from 0 to 100 for the CPU upper threshold: ")) / 100 # 0.50
 cpu_lower_threshold = int(input("Enter a number from 0 to 100 for the CPU lower threshold: ")) / 100 # 0.10
 
+# p, i, d parameters to be tested
+proportional_gain = int(input("Enter a number for Kp: "))
+integral_gain = int(input("Enter a number for Ki: "))
+derivative_gain = int(input("Enter a number for Kd: "))
+
 # time interval between each avg cpu usage calculations
-interval = 5
+interval = int(input("Enter a number for the interval: "))
 
 # this is taken directly from docker client:
 #   https://github.com/docker/docker/blob/28a7577a029780e4533faf3d057ec9f6c7a10948/api/client/stats.go#L309
@@ -116,7 +121,13 @@ for service_name, service in services.items():
 # cpu usage api is not fast. be patient!
 # here we consistently get the cpu usage of all the web-workers and calculate the average
 
+# https://en.wikipedia.org/wiki/Proportional_control
+# e(t) = SP - PV
+def e(sp, pv):
+    return sp - pv
+
 cpu_usage_avg_prev = None
+cpu_usage_avg_arr = []
 
 while True:
     cpu_usages = []
@@ -132,22 +143,45 @@ while True:
             cpu_usages.append(calculate_cpu_percent(data))
 
     cpu_usage_avg = sum(cpu_usages) / len(cpu_usages)
+    cpu_usage_avg_arr.append(cpu_usage_avg)
+
     if cpu_usage_avg_prev == None:
         cpu_usage_avg_prev = cpu_usage_avg
 
-    # Derivative: (e(k)-e(k-1))/T
-    derivative = abs(round((cpu_usage_avg*100 - cpu_usage_avg_prev*100) / (interval * 2)))
-    balanced_derivative = abs(round(derivative / 10))
+    set_point = (cpu_upper_threshold + cpu_lower_threshold) / 2
 
-    if balanced_derivative > 0:
-        scale_num = balanced_derivative if balanced_derivative > 0 else 1
+    proportional_gain = 1
+    integral_gain = 1
+    derivative_gain = 1
+
+    # PID Controller
+
+    # Proportional gain - e(t)
+    output_proportional_controller = proportional_gain * e(set_point, cpu_usage_avg)
+    print("Output Proportional Controller: {0}".format(output_proportional_controller))
+
+    # Integral gain (using last five cpu usages) -> Sum
+    output_integral_controller = integral_gain * (sum(cpu_usage_avg_arr[-interval: ]) * interval)
+    print("Output Integral Controller: {0}".format(output_integral_controller))
+
+    # Derivative gain: (e(k)-e(k-1))/T
+    output_derivative_controller = derivative_gain * (e(set_point, cpu_usage_avg) - e(set_point, cpu_usage_avg_prev) / interval)
+    print("Output Derivative Controller: {0}".format(output_derivative_controller))
+
+    controller_output = abs(round(output_proportional_controller + output_integral_controller + output_derivative_controller))
+
+    print("Controller final output: {0}".format(controller_output))
+
+    if controller_output > 0 and controller_output <= 15:
+        scale_num = controller_output
+    elif controller_output > 15:
+        scale_num = 15
     else:
         scale_num = 1
 
     print("Previous CPU Usage (avg): {0:.2f}%".format(cpu_usage_avg_prev * 100))
     print("CPU Usage (avg): {0:.2f}%".format(cpu_usage_avg * 100))
     print("CPU Setpoints are currently from {low:.2f}% to {high:.2f}%".format(low=cpu_lower_threshold * 100, high=cpu_upper_threshold * 100))
-    print("Derivative: {0:.2f}".format(derivative))
     print("Scale parameter value: ", scale_num)
     print("-------------")
 
