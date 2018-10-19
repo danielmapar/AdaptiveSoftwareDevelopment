@@ -150,10 +150,6 @@ while True:
 
     set_point = (cpu_upper_threshold + cpu_lower_threshold) / 2
 
-    proportional_gain = 1
-    integral_gain = 1
-    derivative_gain = 1
-
     # PID Controller
 
     # Proportional gain - e(t)
