@@ -1,0 +1,24 @@
+version: '2'
+services:
+  db:
+    image: mysql:5.6
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_USER: adaptive_user
+      MYSQL_PASSWORD: adaptive_pw
+      MYSQL_DATABASE: adaptive_db
+    volumes:
+      - ./database/mysql:/var/lib/mysql
+    restart: always
+  web:
+    build:
+      context: ../api/.
+    links:
+      - db
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    command: npm run start
