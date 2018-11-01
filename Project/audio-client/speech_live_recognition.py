@@ -4,12 +4,12 @@ import speech_recognition as sr
 r = sr.Recognizer()
 
 print(sr.Microphone.list_microphone_names())
-mic = sr.Microphone(device_index=0) # Internal mic
+mic = sr.Microphone(device_index=7) # Internal mic
 
 with mic as source:
     audio = r.listen(source)
 
-r.recognize_google(audio)
+print(r.recognize_google(audio))
 
 # r = sr.Recognizer()
 #
