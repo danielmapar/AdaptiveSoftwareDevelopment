@@ -1,4 +1,4 @@
-# Setting up input listener
+# Command Listener
 
 * MacOSX: `brew install portaudio`
   * Necessary for capturing microphone input
@@ -8,3 +8,5 @@
   * Necessary for capturing microphone input
 
 * `pip3 install -r requirements.txt`
+
+* `python3 speech_live_recognition.py`

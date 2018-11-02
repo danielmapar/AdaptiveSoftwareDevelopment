@@ -1,2 +1,4 @@
 SpeechRecognition
 PyAudio
+Kivy
+gql

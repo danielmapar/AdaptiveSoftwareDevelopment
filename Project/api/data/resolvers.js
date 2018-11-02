@@ -28,12 +28,18 @@ const resolvers = {
         password: await bcrypt.hash(password, 10)
       })
 
+      console.log(jsonwebtoken.sign(
+        { id: user.id, email: user.email },
+        process.env.JWT_SECRET,
+        { expiresIn: '1y' }
+      ));
+
       // Return json web token
       return jsonwebtoken.sign(
         { id: user.id, email: user.email },
         process.env.JWT_SECRET,
         { expiresIn: '1y' }
-      )
+      );
     },
 
     // Handles user login

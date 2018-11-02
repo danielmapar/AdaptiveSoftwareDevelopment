@@ -4,20 +4,20 @@
 
 ## Getting Started
 
-Clone the project repository by running the command below if you use HTTPS
+* Clone the project repository by running the command below if you use HTTPS
 
 ```bash
 git clone https://github.com/danielmapar/AdaptiveSoftwareDevelopment.git
 ```
 
-After cloning, run:
+* After cloning, run:
 
 ```bash
 cd Project/api
 npm install
 ```
 
-Rename `.env.example` to `.env` then fill in your database detail and your JWT secret:
+* Rename `.env.example` to `.env` then fill in your database detail and your JWT secret:
 
 ```txt
 NODE_ENV=development
@@ -28,16 +28,16 @@ DB_NAME=adaptive_db
 JWT_SECRET=adaptive_software_jwt
 ```
 
-Then run the migration:
+* Then run the migration:
 
 ```bash
 sequelize db:migrate
 ```
 
-And finally, start the application:
+* And finally, start the application:
 
 ```bash
 npm start
 ```
 
-The server will be running on [http://localhost:3000/api](http://localhost:3000/api).
+* The server will be running on [http://localhost:3000/api](http://localhost:3000/api).

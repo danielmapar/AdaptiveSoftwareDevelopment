@@ -1,0 +1,55 @@
+#:include connected.kv
+
+<Login>:
+    BoxLayout
+        id: login_layout
+        orientation: 'vertical'
+        padding: [10,30,10,30]
+        spacing: 30
+
+        Image:
+            source: "./images/light-bulb.jpg"
+
+        Label:
+            text: 'Welcome to light control'
+            font_size: 32
+
+        Label:
+            id: error_message
+            color: 237,41,57,1
+            text: root.error_message
+            font_size: 32
+
+        BoxLayout:
+            orientation: 'vertical'
+
+            Label:
+                text: 'Email'
+                font_size: 25
+                halign: 'left'
+                text_size: root.width-18, 25
+
+            TextInput:
+                id: login
+                multiline:False
+                font_size: 25
+
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: 'Password'
+                halign: 'left'
+                font_size: 25
+                text_size: root.width-18, 25
+
+            TextInput:
+                id: password
+                multiline:False
+                password:True
+                font_size: 25
+
+        Button:
+            text: 'Connect'
+            font_size: 30
+
+            on_press: root.do_login(login.text, password.text)

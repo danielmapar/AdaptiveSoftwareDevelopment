@@ -10,8 +10,6 @@ const dbDetails = {
   dialect: 'mysql'
 }
 
-console.log("CONFIG: ", dbDetails)
-
 module.exports = {
   development: dbDetails,
   production: dbDetails

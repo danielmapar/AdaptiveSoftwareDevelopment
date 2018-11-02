@@ -16,7 +16,7 @@ const typeDefs = `
   }
 
   type Mutation {
-    signup (username: String!, email: String!, password: String!): User
+    signup (username: String!, email: String!, password: String!): String
     login (email: String!, password: String!): String
   }
 `
