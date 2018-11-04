@@ -101,13 +101,15 @@ class Connected(Screen):
 
     def listening_callback(self, recognizer, audio):
         print("Listening...")
-        os.system('say Tell me a command!')
-
-        print(self.app.commands['me']['listenerCommand'])
         try:
-            text = recognizer.recognize_google(audio)
-            if text == self.app.commands['me']['listenerCommand']:
+            current_command = recognizer.recognize_google(audio)
+            if current_command == self.app.commands['me']['listenerCommand']:
                 os.system('say Tell me a command!')
+
+            for command in self.app.commands['commands']:
+                if current_command == command['from']:
+                    os.system('say Command accepted!')
+                    print("Send command - TODO")
 
             print("------")
         except sr.UnknownValueError:
