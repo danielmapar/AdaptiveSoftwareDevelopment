@@ -6,28 +6,60 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.uix.image import Image
 
+from gql import gql, Client
+from gql.transport.requests import RequestsHTTPTransport
+
+import os
+
 import speech_recognition as sr
 
 class Connected(Screen):
     microphone_list = []
     listening_is_on = False
     stop_listening = None
+    transport = None
+    client = None
+    app = None
 
-    def on_enter(self,*args):
+    def on_enter(self, *args):
+
+        transport = RequestsHTTPTransport(
+            url='http://localhost:3000/graphql',
+            use_json=True
+        )
+
+        transport.headers = {'Authorization': 'Bearer ' + self.app.jwt_token}
+
+        client = Client(
+            retries=3,
+            transport=transport,
+            fetch_schema_from_transport=True,
+        )
+
+        query = gql("query { me { listenerCommand  } commands { from, to } }")
+
+        try:
+            self.app.commands = client.execute(query)
+        except Exception as err:
+            print(err)
+            pass
+
         pass
 
     def __init__(self, **kwargs):
         self.name='connected'
         super(Screen,self).__init__(**kwargs)
 
+        self.app = App.get_running_app()
+
         self.r = sr.Recognizer()
         self.m = sr.Microphone()
         with self.m as source:
             self.r.adjust_for_ambient_noise(source)
 
-        layout = BoxLayout(orientation='vertical', size=(Window.size[0],Window.size[1]), pos=(0, 0), size_hint=(None, None))
-
         self.microphone_list = sr.Microphone.list_microphone_names()
+
+        layout = BoxLayout(orientation='vertical', size=(Window.size[0],Window.size[1]), pos=(0, 0), size_hint=(None, None))
 
         dropdown = DropDown()
         for microphone in self.microphone_list:
@@ -67,11 +99,16 @@ class Connected(Screen):
         if self.stop_listening:
             self.stop_active_listening()
 
-    def listening_active(self, recognizer, audio):
+    def listening_callback(self, recognizer, audio):
         print("Listening...")
+        os.system('say Tell me a command!')
+
+        print(self.app.commands['me']['listenerCommand'])
         try:
             text = recognizer.recognize_google(audio)
-            print(text)
+            if text == self.app.commands['me']['listenerCommand']:
+                os.system('say Tell me a command!')
+
             print("------")
         except sr.UnknownValueError:
             print("Google could not understand audio")
@@ -79,12 +116,12 @@ class Connected(Screen):
             print("Google error; {0}".format(e))
 
     def start_active_listen(self):
-        print("Listening!!!")
+        print("Start Listening!!!")
         self.listening_is_on = True;
         self.listening_btn.text = "Stop listening!"
         self.loading_img.source = 'images/listening_on.png'
         self.loading_img.reload()
-        self.stop_listening = self.r.listen_in_background(self.m, self.listening_active)
+        self.stop_listening = self.r.listen_in_background(self.m, self.listening_callback)
 
     def stop_active_listening(self):
         print("Stopped Listening!!!")

@@ -12,13 +12,35 @@ services:
     volumes:
       - ./database/mysql:/var/lib/mysql
     restart: always
-  web:
+  api:
     build:
       context: ../api/.
     links:
       - db
     depends_on:
       - db
+    environment:
+      PORT: '3000'
     ports:
       - "3000:3000"
+    volumes:
+      - ../api/server.js:/app/server.js
+      - ../api/config:/app/config
+      - ../api/data:/app/data
+      - ../api/migrations:/app/migrations
+      - ../api/models:/app/models
+    command: npm run start
+  web:
+    build:
+      context: ../web-client/.
+    links:
+      - api
+    depends_on:
+      - api
+    environment:
+      PORT: '3000'
+    ports:
+      - "3001:3000"
+    volumes:
+      - ../web-client:/app
     command: npm run start

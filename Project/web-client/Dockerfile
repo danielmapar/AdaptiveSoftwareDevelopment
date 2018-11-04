@@ -1,16 +1,15 @@
-FROM node:10.11-alpine
+FROM node:8.11.2
+MAINTAINER Daniel Marchena <danielmapar@gmail.com>
 
-ENV NPM_CONFIG_LOGLEVEL notice
-
-# Install NPM packages
+# Create/Set the working directory
+RUN mkdir /app
 WORKDIR /app
-ADD package*.json ./
-RUN npm i
-ADD . .
 
-# Build
-RUN npm run build
+COPY package.json /app/package.json
+RUN npm install
 
-EXPOSE 3000
+# Copy App
+COPY . /app
 
-CMD npm run production
+# Set Entrypoint
+ENTRYPOINT npm run start

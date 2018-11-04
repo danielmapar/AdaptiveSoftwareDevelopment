@@ -10,14 +10,14 @@ from gql.transport.requests import RequestsHTTPTransport
 
 from connected import Connected
 
-_transport = RequestsHTTPTransport(
-    url='http://localhost:3000/api',
+transport = RequestsHTTPTransport(
+    url='http://localhost:3000/graphql',
     use_json=True,
 )
 
 client = Client(
     retries=3,
-    transport=_transport,
+    transport=transport,
     fetch_schema_from_transport=True,
 )
 

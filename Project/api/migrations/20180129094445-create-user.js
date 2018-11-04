@@ -8,8 +8,8 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      deviceId: {
-        type: Sequelize.INTEGER
+      listenerCommand: {
+        type: Sequelize.STRING
       },
       username: {
         type: Sequelize.STRING
@@ -24,7 +24,6 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false
       },
-
       updatedAt: {
         type: Sequelize.DATE,
         allowNull: false
