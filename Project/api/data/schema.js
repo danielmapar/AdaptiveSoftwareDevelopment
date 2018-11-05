@@ -28,6 +28,7 @@ const typeDefs = `
     signup (username: String!, email: String!, password: String!): String
     login (email: String!, password: String!): String
     updateCommands (froms: [String]!, tos: [String]!, listenerCommand: String!): [Command]
+    sendCommand (fromCommand: String!): String
   }
 `
 

@@ -10,41 +10,46 @@ from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
 
 import os
+import time
+import threading
+from threading import Thread
 
 import speech_recognition as sr
 
 class Connected(Screen):
     microphone_list = []
     listening_is_on = False
-    stop_listening = None
     transport = None
     client = None
     app = None
+    audio_thread = None
+    kill_mic_thread = None
+    transport = None
+    client = None
 
     def on_enter(self, *args):
 
-        transport = RequestsHTTPTransport(
+        self.kill_mic_thread = threading.Event()
+
+        self.transport = RequestsHTTPTransport(
             url='http://localhost:3000/graphql',
             use_json=True
         )
 
-        transport.headers = {'Authorization': 'Bearer ' + self.app.jwt_token}
+        self.transport.headers = {'Authorization': 'Bearer ' + self.app.jwt_token}
 
-        client = Client(
+        self.client = Client(
             retries=3,
-            transport=transport,
+            transport=self.transport,
             fetch_schema_from_transport=True,
         )
 
         query = gql("query { me { listenerCommand  } commands { from, to } }")
 
         try:
-            self.app.commands = client.execute(query)
+            self.app.commands = self.client.execute(query)
         except Exception as err:
             print(err)
-            pass
-
-        pass
 
     def __init__(self, **kwargs):
         self.name='connected'
@@ -54,8 +59,6 @@ class Connected(Screen):
 
         self.r = sr.Recognizer()
         self.m = sr.Microphone()
-        with self.m as source:
-            self.r.adjust_for_ambient_noise(source)
 
         self.microphone_list = sr.Microphone.list_microphone_names()
 
@@ -93,29 +96,50 @@ class Connected(Screen):
     def on_select_microphone(self, instance, selected_microphone):
         setattr(self.dropdown_btn, 'text', selected_microphone)
 
+        if self.audio_thread:
+            self.stop_active_listening()
+
         microphones = self.m.list_microphone_names()
         self.m = sr.Microphone(device_index=microphones.index(selected_microphone))
 
-        if self.stop_listening:
-            self.stop_active_listening()
 
-    def listening_callback(self, recognizer, audio):
-        print("Listening...")
-        try:
-            current_command = recognizer.recognize_google(audio)
-            if current_command == self.app.commands['me']['listenerCommand']:
-                os.system('say Tell me a command!')
+    def listen_in_background(self, microphone, recognizer, data, stop_event):
+        while not stop_event.wait(1):
+            print("-> Waiting control command!!!")
+            with microphone as source:
+                audio = recognizer.listen(source)
 
-            for command in self.app.commands['commands']:
-                if current_command == command['from']:
-                    os.system('say Command accepted!')
-                    print("Send command - TODO")
+            print("-> Checking control command!!!")
+            try:
+                call_command = recognizer.recognize_google(audio)
+                print(call_command)
+                if call_command == data['me']['listenerCommand']:
+                    os.system('say Tell me a command!')
+                    print(data['commands'])
+                    print("-> Waiting command!!!")
+                    with microphone as source:
+                        audio = recognizer.listen(source)
+                    exec_command = recognizer.recognize_google(audio)
+                    print("-> Checking command!!!")
+                    for command in data['commands']:
+                        print(exec_command)
+                        print(command['from'])
+                        if exec_command == command['from']:
+                            os.system('say Command accepted!')
+                            mutation = gql("mutation { sendCommand(command: \"" + exec_command +"\") }")
+                            try:
+                                self.client.execute(mutation)
+                                os.system('say Command executed!')
+                            except Exception as err:
+                                print(err)
 
-            print("------")
-        except sr.UnknownValueError:
-            print("Google could not understand audio")
-        except sr.RequestError as e:
-            print("Google error; {0}".format(e))
+                print("------")
+            except sr.UnknownValueError:
+                print("Google could not understand audio")
+            except sr.RequestError as e:
+                print("Google error; {0}".format(e))
+            except Exception as e:
+                print("General error; {0}".format(e))
 
     def start_active_listen(self):
         print("Start Listening!!!")
@@ -123,7 +147,8 @@ class Connected(Screen):
         self.listening_btn.text = "Stop listening!"
         self.loading_img.source = 'images/listening_on.png'
         self.loading_img.reload()
-        self.stop_listening = self.r.listen_in_background(self.m, self.listening_callback)
+        self.audio_thread = Thread(target = self.listen_in_background, args=(self.m, self.r, self.app.commands, self.kill_mic_thread))
+        self.audio_thread.start()
 
     def stop_active_listening(self):
         print("Stopped Listening!!!")
@@ -131,9 +156,11 @@ class Connected(Screen):
         self.listening_btn.text = "Make me listen!"
         self.loading_img.source = 'images/listening_off.jpeg'
         self.loading_img.reload()
-        self.stop_listening(False)
+        self.kill_mic_thread.set()
+        self.audio_thread.join()
 
     def disconnect(self, instance):
+        self.stop_active_listening()
         self.manager.transition = SlideTransition(direction="right")
         self.manager.current = 'login'
         self.manager.get_screen('login').resetForm()

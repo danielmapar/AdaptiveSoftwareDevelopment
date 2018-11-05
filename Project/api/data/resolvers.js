@@ -3,6 +3,7 @@
 const { User, Command } = require('../models')
 const bcrypt = require('bcrypt')
 const jsonwebtoken = require('jsonwebtoken')
+
 require('dotenv').config()
 
 const resolvers = {
@@ -41,6 +42,11 @@ const resolvers = {
         email,
         password: await bcrypt.hash(password, 10)
       })
+
+      let hueUser = new client.users.User;
+      hueUser.deviceType = username;
+
+      await client.users.create(user);
 
       // Return json web token
       return jsonwebtoken.sign(
@@ -120,7 +126,32 @@ const resolvers = {
           userId: user.id
         }
       });
-    }
+    },
+
+    async sendCommand (_, { fromCommand }, { user, philipsHueClient }) {
+      const user = await User.findOne({ where: { email } })
+
+      if (!user) {
+        throw new Error('No user with that email')
+      }
+
+      const light = await philipsHueClient.lights.getAll().find(light => light.uniqueId === '00:17:88:01:03:89:c2:2f-0b' );
+
+      const command = await Command.findOne({
+        where: {
+          userId: user.id,
+          from: command
+        }
+      });
+
+      if (command) {
+        eval('light.'+command.to)
+      }
+
+      await philipsHueClient.lights.save(light);
+
+      return "Command executed!";
+    },
   }
 }
 
