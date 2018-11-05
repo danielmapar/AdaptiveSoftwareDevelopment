@@ -1,8 +1,9 @@
 'use strict'
 
-const { User, Command } = require('../models')
+const { User, Command, CommandHistory } = require('../models')
 const bcrypt = require('bcrypt')
 const jsonwebtoken = require('jsonwebtoken')
+const moment = require('moment')
 
 require('dotenv').config()
 
@@ -129,24 +130,68 @@ const resolvers = {
     },
 
     async sendCommand (_, { fromCommand }, { user, philipsHueClient }) {
-      const user = await User.findOne({ where: { email } })
-
       if (!user) {
         throw new Error('No user with that email')
       }
 
-      const light = await philipsHueClient.lights.getAll().find(light => light.uniqueId === '00:17:88:01:03:89:c2:2f-0b' );
+      const light = (await philipsHueClient.lights.getAll()).find(light => light.uniqueId === '00:17:88:01:03:89:c2:2f-0b' );
 
       const command = await Command.findOne({
         where: {
           userId: user.id,
-          from: command
+          from: fromCommand
         }
       });
+      if (!command) return "Failed to find command!";
 
-      if (command) {
-        eval('light.'+command.to)
-      }
+      await CommandHistory.create({
+        userId: user.id,
+        commandId: command.id,
+      });
+
+      const now = new Date()
+
+      const commandsHistory = await CommandHistory.findAll({
+          where: {
+              userId: user.id,
+              createdAt: {
+                  $gte: moment(now).subtract(1, "minutes").toDate(),
+                  $lte: now
+              }
+          },
+          include: [{
+            model: Command
+          }]
+      });
+
+      const commandsHistoryMap = {};
+
+      // Create a map with previously executed commands in the last minute
+      commandsHistory.forEach(commandHistory => {
+        const nameValue = commandHistory.Command.to.replace(/ /g,'').split("=")
+        if (!commandsHistoryMap[nameValue[0]]) {
+          commandsHistoryMap[nameValue[0]] = {}
+        }
+        if (!commandsHistoryMap[nameValue[0]][nameValue[1]]) {
+          commandsHistoryMap[nameValue[0]][nameValue[1]] = 0;
+        }
+        commandsHistoryMap[nameValue[0]][nameValue[1]] += 1
+      });
+
+      const nameValue = command.to.replace(/ /g,'').split("=")
+
+      // Check if the command being executed has a number, otherwise do not balance it
+      /*if (!isNaN(nameValue[1])) {
+        let total = 0;
+        console.log(commandsHistoryMap[nameValue[0]])
+        Object.keys(commandsHistoryMap[nameValue[0]]).forEach(val => {
+          total += Number(val) *
+        });
+        total = total / Object.keys(commandsHistoryMap[nameValue[0]]).length;
+        eval('light.'+nameValue[0]+'='+total)
+      } else {*/
+      eval('light.'+command.to)
+      //}
 
       await philipsHueClient.lights.save(light);
 
