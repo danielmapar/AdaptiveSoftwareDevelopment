@@ -157,7 +157,8 @@ class Connected(Screen):
         self.loading_img.source = 'images/listening_off.jpeg'
         self.loading_img.reload()
         self.kill_mic_thread.set()
-        self.audio_thread.join()
+        if self.audio_thread:
+            self.audio_thread.join()
 
     def disconnect(self, instance):
         self.stop_active_listening()

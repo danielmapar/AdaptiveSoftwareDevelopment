@@ -134,7 +134,11 @@ const resolvers = {
         throw new Error('No user with that email')
       }
 
-      const light = (await philipsHueClient.lights.getAll()).find(light => light.uniqueId === '00:17:88:01:03:89:c2:2f-0b' );
+      if (!philipsHueClient.lights){
+        throw new Error('Philips Hue not connected!')
+      }
+
+      const lights = await philipsHueClient.lights.getAll(); //).find(light => light.uniqueId === '00:17:88:01:03:89:c2:2f-0b' );
 
       const command = await Command.findOne({
         where: {
@@ -190,10 +194,10 @@ const resolvers = {
         total = total / Object.keys(commandsHistoryMap[nameValue[0]]).length;
         eval('light.'+nameValue[0]+'='+total)
       } else {*/
-      eval('light.'+command.to)
+      lights.forEach((light, index) => eval('lights['+index+'].'+command.to))
       //}
 
-      await philipsHueClient.lights.save(light);
+      await philipsHueClient.lights.save(lights);
 
       return "Command executed!";
     },
