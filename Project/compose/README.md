@@ -9,3 +9,5 @@
 * Run `docker-compose up -d --build --force-recreate`
   * `docker ps`
   * `docker exec -ti 3912bba70e66 bash`
+
+* Run `docker-compose logs -f --tail 20 api web` for logs

@@ -1,4 +1,4 @@
-# API
+# Light Control - GraphQL API
 
  This GraphQL API supports authentication with JWT and does IoT device management
 

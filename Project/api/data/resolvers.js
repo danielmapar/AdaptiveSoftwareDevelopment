@@ -38,16 +38,16 @@ const resolvers = {
   Mutation: {
     // Handle user signup
     async signup (_, { username, email, password }) {
+
+      if (await User.findOne({ where: { email } })) {
+        throw new Error('User already registered with this email')
+      }
+
       const user = await User.create({
         username,
         email,
         password: await bcrypt.hash(password, 10)
       })
-
-      let hueUser = new client.users.User;
-      hueUser.deviceType = username;
-
-      await client.users.create(user);
 
       // Return json web token
       return jsonwebtoken.sign(
