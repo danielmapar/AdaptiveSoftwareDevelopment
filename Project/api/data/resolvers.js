@@ -194,10 +194,11 @@ const resolvers = {
         total = total / Object.keys(commandsHistoryMap[nameValue[0]]).length;
         eval('light.'+nameValue[0]+'='+total)
       } else {*/
-      lights.forEach((light, index) => eval('lights['+index+'].'+command.to))
+      await Promise.all(lights.map(async (light) => {
+        eval('light.'+command.to)
+        await philipsHueClient.lights.save(light);
+      }));
       //}
-
-      await philipsHueClient.lights.save(lights);
 
       return "Command executed!";
     },
