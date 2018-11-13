@@ -28,9 +28,9 @@ cpu_upper_threshold = int(input("Enter a number from 0 to 100 for the CPU upper 
 cpu_lower_threshold = int(input("Enter a number from 0 to 100 for the CPU lower threshold: ")) / 100 # 0.10
 
 # p, i, d parameters to be tested
-proportional_gain = int(input("Enter a number for Kp: "))
-integral_gain = int(input("Enter a number for Ki: "))
-derivative_gain = int(input("Enter a number for Kd: "))
+proportional_gain = float(input("Enter a number for Kp: "))
+integral_gain = float(input("Enter a number for Ki: "))
+derivative_gain = float(input("Enter a number for Kd: "))
 
 # time interval between each avg cpu usage calculations
 interval = int(input("Enter a number for the interval: "))
