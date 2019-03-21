@@ -1,0 +1,101 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1545609222762,5,HTTP Request,500,Internal Server Error,Thread Group 1-1,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,1
+1545609222866,8,HTTP Request,500,Internal Server Error,Thread Group 1-2,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,8,0,1
+1545609222966,5,HTTP Request,500,Internal Server Error,Thread Group 1-3,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,2
+1545609223067,5,HTTP Request,500,Internal Server Error,Thread Group 1-4,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,5,0,1
+1545609223167,5,HTTP Request,500,Internal Server Error,Thread Group 1-5,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,5,0,1
+1545609223267,4,HTTP Request,500,Internal Server Error,Thread Group 1-6,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,1
+1545609223367,6,HTTP Request,500,Internal Server Error,Thread Group 1-7,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,6,0,1
+1545609223468,5,HTTP Request,500,Internal Server Error,Thread Group 1-8,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,1
+1545609223568,5,HTTP Request,500,Internal Server Error,Thread Group 1-9,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,1
+1545609223669,5,HTTP Request,500,Internal Server Error,Thread Group 1-10,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,1
+1545609223768,4,HTTP Request,500,Internal Server Error,Thread Group 1-11,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,1
+1545609223870,5,HTTP Request,500,Internal Server Error,Thread Group 1-12,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,1
+1545609223971,6,HTTP Request,500,Internal Server Error,Thread Group 1-13,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,5,0,1
+1545609224070,9,HTTP Request,500,Internal Server Error,Thread Group 1-14,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,9,0,2
+1545609224170,5,HTTP Request,500,Internal Server Error,Thread Group 1-15,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,1
+1545609224269,4,HTTP Request,500,Internal Server Error,Thread Group 1-16,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,1
+1545609224372,5,HTTP Request,500,Internal Server Error,Thread Group 1-17,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,5,0,1
+1545609224470,4,HTTP Request,500,Internal Server Error,Thread Group 1-18,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,1
+1545609224570,12,HTTP Request,500,Internal Server Error,Thread Group 1-19,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,12,0,1
+1545609224671,5,HTTP Request,500,Internal Server Error,Thread Group 1-20,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,5,0,1
+1545609224769,4,HTTP Request,500,Internal Server Error,Thread Group 1-21,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,1
+1545609224871,5,HTTP Request,500,Internal Server Error,Thread Group 1-22,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,5,0,1
+1545609224972,3,HTTP Request,500,Internal Server Error,Thread Group 1-23,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,3,0,1
+1545609225073,4,HTTP Request,500,Internal Server Error,Thread Group 1-24,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,1
+1545609225173,4,HTTP Request,500,Internal Server Error,Thread Group 1-25,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,1
+1545609225273,5,HTTP Request,500,Internal Server Error,Thread Group 1-26,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,1
+1545609225374,4,HTTP Request,500,Internal Server Error,Thread Group 1-27,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,1
+1545609225475,10,HTTP Request,500,Internal Server Error,Thread Group 1-28,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,10,0,2
+1545609225572,2,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-29,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,2
+1545609225674,7,HTTP Request,500,Internal Server Error,Thread Group 1-30,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,7,0,1
+1545609225772,2,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-31,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,2
+1545609225871,6,HTTP Request,500,Internal Server Error,Thread Group 1-32,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,6,0,1
+1545609225973,3,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-33,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609226072,5,HTTP Request,500,Internal Server Error,Thread Group 1-34,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,5,0,1
+1545609226176,1,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-35,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,1
+1545609226276,7,HTTP Request,500,Internal Server Error,Thread Group 1-36,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,6,0,1
+1545609226374,3,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-37,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609226477,6,HTTP Request,500,Internal Server Error,Thread Group 1-38,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,6,0,1
+1545609226572,2,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-39,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,2
+1545609226678,6,HTTP Request,500,Internal Server Error,Thread Group 1-40,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,5,0,1
+1545609226775,4,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-41,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,4
+1545609226877,5,HTTP Request,500,Internal Server Error,Thread Group 1-42,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,2
+1545609226977,2,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-43,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,2
+1545609227078,10,HTTP Request,500,Internal Server Error,Thread Group 1-44,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,9,0,1
+1545609227178,4,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-45,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609227279,6,HTTP Request,500,Internal Server Error,Thread Group 1-46,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,6,0,3
+1545609227379,5,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-47,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,5
+1545609227479,6,HTTP Request,500,Internal Server Error,Thread Group 1-48,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,6,0,2
+1545609227578,3,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-49,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609227680,6,HTTP Request,500,Internal Server Error,Thread Group 1-50,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,5,0,1
+1545609227779,4,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-51,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,4
+1545609227879,5,HTTP Request,500,Internal Server Error,Thread Group 1-52,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,4,0,1
+1545609227980,3,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-53,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609228078,5,HTTP Request,500,Internal Server Error,Thread Group 1-54,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,5,0,2
+1545609228181,3,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-55,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609228277,8,HTTP Request,500,Internal Server Error,Thread Group 1-56,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,7,0,2
+1545609228378,3,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-57,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609228481,13,HTTP Request,500,Internal Server Error,Thread Group 1-58,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,12,0,1
+1545609228582,3,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-59,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609228682,13,HTTP Request,500,Internal Server Error,Thread Group 1-60,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,11,0,2
+1545609228779,3,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-61,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609228883,16,HTTP Request,500,Internal Server Error,Thread Group 1-62,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,15,0,2
+1545609228982,3,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-63,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609229083,6,HTTP Request,500,Internal Server Error,Thread Group 1-64,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,6,0,1
+1545609229180,4,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-65,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,4
+1545609229283,6,HTTP Request,500,Internal Server Error,Thread Group 1-66,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,6,0,1
+1545609229379,3,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-67,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609229483,25,HTTP Request,500,Internal Server Error,Thread Group 1-68,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,24,0,2
+1545609229582,5,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-69,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,5
+1545609229680,13,HTTP Request,500,Internal Server Error,Thread Group 1-70,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,12,0,2
+1545609229780,3,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-71,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609229882,23,HTTP Request,500,Internal Server Error,Thread Group 1-72,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,23,0,1
+1545609229983,4,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-73,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,4
+1545609230082,9,HTTP Request,500,Internal Server Error,Thread Group 1-74,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,8,0,2
+1545609230182,5,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-75,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,5
+1545609230282,13,HTTP Request,500,Internal Server Error,Thread Group 1-76,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,13,0,1
+1545609230383,3,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-77,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609230584,4,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-79,text,false,,2717,0,2,2,http://192.168.99.100:3000/graphql,0,0,3
+1545609230484,134,HTTP Request,500,Internal Server Error,Thread Group 1-78,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,132,0,2
+1545609230683,9,HTTP Request,500,Internal Server Error,Thread Group 1-80,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,8,0,2
+1545609230784,4,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-81,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,4
+1545609230885,9,HTTP Request,500,Internal Server Error,Thread Group 1-82,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,8,0,2
+1545609230987,3,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-83,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609231087,8,HTTP Request,500,Internal Server Error,Thread Group 1-84,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,7,0,2
+1545609231186,4,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-85,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,4
+1545609231287,7,HTTP Request,500,Internal Server Error,Thread Group 1-86,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,6,0,2
+1545609231386,3,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-87,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609231487,10,HTTP Request,500,Internal Server Error,Thread Group 1-88,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,8,0,3
+1545609231587,3,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-89,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609231687,11,HTTP Request,500,Internal Server Error,Thread Group 1-90,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,10,0,2
+1545609231787,3,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-91,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609231887,6,HTTP Request,500,Internal Server Error,Thread Group 1-92,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,6,0,1
+1545609231984,4,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-93,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,4
+1545609232088,7,HTTP Request,500,Internal Server Error,Thread Group 1-94,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,6,0,2
+1545609232187,4,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-95,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,4
+1545609232287,40,HTTP Request,500,Internal Server Error,Thread Group 1-96,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,38,0,22
+1545609232389,4,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-97,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,3
+1545609232487,10,HTTP Request,500,Internal Server Error,Thread Group 1-98,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,9,0,2
+1545609232588,4,HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.99.100:3000 [/192.168.99.100] failed: Connection refused (Connection refused),Thread Group 1-99,text,false,,2717,0,1,1,http://192.168.99.100:3000/graphql,0,0,4
+1545609232688,9,HTTP Request,500,Internal Server Error,Thread Group 1-100,,false,,254,402,1,1,http://192.168.99.100:3000/graphql,8,0,2
